@@ -167,10 +167,9 @@ public class MybatisServiceImpl implements MybatisService {
         dtoSb3.append("}");
         OutputStreamWriter fileWriter;
         OutputStreamWriter fileWriterDto;
-
         try {
             fileWriter = new OutputStreamWriter(new FileOutputStream(file),"UTF-8");
-            fileWriterDto = new OutputStreamWriter(new FileOutputStream(file),"UTF-8");
+            fileWriterDto = new OutputStreamWriter(new FileOutputStream(file2),"UTF-8");
             fileWriter.write(sb1.toString());
             fileWriter.write(entySb.toString());
             fileWriter.write(entySb3.toString());

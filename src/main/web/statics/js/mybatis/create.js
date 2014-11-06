@@ -16,6 +16,10 @@ function main() {
     $('#saveBtn').click(function () {
         saveDatabase();
     });
+    $('#dbSel').change(function(){
+        var dbid=$(this).children('option:selected').val();
+        loadTables(dbid);
+    });
     loadData();
 }
 function loadData() {
@@ -61,6 +65,7 @@ function loadData() {
     });
 }
 function loadTables(dbsrcId) {
+    alert(dbsrcId);
     var sendurl = "/mybatis/findtables";
     var paramObj = {};
     paramObj.dbsrcId = dbsrcId;
@@ -73,6 +78,7 @@ function loadTables(dbsrcId) {
             var data = resp.data;
             var tbSelStr = "";
             $('#tbSel').empty();
+            $("#tbSel").find("option").remove();
             for (var i = 0; i < data.length; i++) {
                 tbSelStr += "<option value='" + data[i] + "'>";
                 tbSelStr += data[i];
@@ -80,9 +86,6 @@ function loadTables(dbsrcId) {
             }
             $('#tbSel').html(tbSelStr);
             $('#dbSel').selectpicker({
-                width: 565
-            });
-            $('#tbSel').selectpicker({
                 width: 565
             });
         }
@@ -129,7 +132,7 @@ function createConfig() {
             return;
         }
         if (resp.status == 1) {
-            alert("成功生成");
+//            alert("成功生成");
         }
         if (resp.status != 1) {
             alert(resp.msg);

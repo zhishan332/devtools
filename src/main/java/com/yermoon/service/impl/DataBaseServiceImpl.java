@@ -10,9 +10,10 @@ import org.springframework.stereotype.Service;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import static com.yermoon.utils.ConvertUtils.getJavaTypeFromSqlType;
 /**
  * To change this template use File | Settings | File Templates.
@@ -33,7 +34,7 @@ public class DataBaseServiceImpl implements DataBaseService {
         ResultSetMetaData mata = stat.getMetaData();
         JTable jTable = new JTable();
         jTable.setTableName(tableName);
-        Map<String, JColumn> jColumnMap = new HashMap<String, JColumn>();
+        Map<String, JColumn> jColumnMap = new LinkedHashMap<String, JColumn>();
         for (int i = 1; i <= mata.getColumnCount(); i++) {
             JColumn jColumn = new JColumn();
             jColumn.setColumnName(mata.getColumnName(i).toLowerCase());

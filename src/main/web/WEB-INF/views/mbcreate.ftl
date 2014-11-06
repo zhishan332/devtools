@@ -17,9 +17,9 @@
                 <select class="selectpicker" data-style="btn-default" id="dbSel" style="width: 400px%">
                 </select>
             </div>
-            <div style="margin-top: 10px">
+            <div style="margin-top: 5px;margin-bottom: 5px">
                 <label for="tbSel">选择表：</label>
-                <select class="selectpicker" data-style="btn-default" id="tbSel" style="width: 400px">
+                <select id="tbSel" style="width: 400px;">
                 </select>
             </div>
 
@@ -108,5 +108,5 @@
     </div>
     <!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<script src="<@spring.url relativeUrl='/statics/js/mybatis/create.js'/>" type="text/javascript"></script>
+<script src="<@spring.url relativeUrl='/statics/js/mybatis/create.js?v=2'/>" type="text/javascript"></script>
 <#include "footer.ftl"  encoding="utf-8" />
