@@ -15,9 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -167,11 +165,12 @@ public class MybatisServiceImpl implements MybatisService {
                 .append("\r\n").append(" */\r\n");
         entySb3.append("}");
         dtoSb3.append("}");
-        FileWriter fileWriter;
-        FileWriter fileWriterDto;
+        OutputStreamWriter fileWriter;
+        OutputStreamWriter fileWriterDto;
+
         try {
-            fileWriter = new FileWriter(file);
-            fileWriterDto = new FileWriter(file2);
+            fileWriter = new OutputStreamWriter(new FileOutputStream(file),"UTF-8");
+            fileWriterDto = new OutputStreamWriter(new FileOutputStream(file),"UTF-8");
             fileWriter.write(sb1.toString());
             fileWriter.write(entySb.toString());
             fileWriter.write(entySb3.toString());
@@ -196,7 +195,7 @@ public class MybatisServiceImpl implements MybatisService {
         String pkName = jTable.getPkColumnName();
         String pkJavaName = jTable.getPkJavaName();
         String mapName = entityName.replaceFirst(entityName.substring(0, 1), entityName.substring(0, 1).toUpperCase());
-        String path2 = path + File.separatorChar + mapName + "Dao.xml";
+        String path2 = path + File.separatorChar + mapName + "Mapper.xml";
         File file = new File(path2);
         file.deleteOnExit();
         String s1 = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n";
@@ -354,9 +353,11 @@ public class MybatisServiceImpl implements MybatisService {
         s15.append("\t\t</where>\r\n");
         s15.append("\t</select>\r\n");
         s15.append("</mapper>");
-        FileWriter fileWriter = null;
+//        FileWriter fileWriter = null;
+        OutputStreamWriter fileWriter;
         try {
-            fileWriter = new FileWriter(file);
+//            fileWriter = new FileWriter(file);
+            fileWriter = new OutputStreamWriter(new FileOutputStream(file),"UTF-8");
             fileWriter.write(s1);
             fileWriter.write(s2);
             fileWriter.write(z22);
