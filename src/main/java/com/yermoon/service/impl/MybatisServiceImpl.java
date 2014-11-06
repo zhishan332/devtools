@@ -329,7 +329,7 @@ public class MybatisServiceImpl implements MybatisService {
             if (entry.getValue().isPkColumn()) continue;
             s13.append("\t\t\t<if test=\"").append(javaName).append(" != null\" >\r\n");
             s13.append("\t\t\t\t").append(col).append(" = ").append("#{").
-                    append(pkJavaName).
+                    append(javaName).
                     append(",jdbcType=").append(jdbcType).append("}");
             if (count != columnMap.size()) {
                 s13.append(",");
