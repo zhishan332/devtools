@@ -38,7 +38,11 @@ public class DataBaseServiceImpl implements DataBaseService {
         for (int i = 1; i <= mata.getColumnCount(); i++) {
             JColumn jColumn = new JColumn();
             jColumn.setColumnName(mata.getColumnName(i).toLowerCase());
-            jColumn.setJdbcType(mata.getColumnTypeName(i));
+            String jdbcType=mata.getColumnTypeName(i);
+            if(jdbcType.equalsIgnoreCase("INT")){
+                jdbcType="INTEGER";
+            }
+            jColumn.setJdbcType(jdbcType);
             jColumn.setJavaType(getJavaTypeFromSqlType(mata.getColumnType(i)));
             jColumn.setJavaName(CamelCaseUtils.toCamelCase(mata.getColumnName(i).toLowerCase()));
             jColumnMap.put(mata.getColumnName(i).toLowerCase(), jColumn);

@@ -200,8 +200,9 @@ public class MybatisServiceImpl implements MybatisService {
         String s1 = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n";
         String s2 = "<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\" >\r\n";
         String z22 = "<!-- Created with MTool.  -->\r\n";
-        String s3 = "<mapper namespace=\"" + packagePath + "\">\r\n\r\n";
+        String s3 = "<mapper namespace=\"" + (packagePath.replace("entity","")) +"dao."+(mapName)+"Mapper"+ "\">\r\n\r\n";
         String entityBeanName = entityName + "Entity";
+        entityBeanName=entityBeanName.replaceFirst(entityBeanName.substring(0, 1), entityBeanName.substring(0, 1).toUpperCase())  ;
         String resultMapName = entityName + "Map";
         String s4 = "\t<resultMap id=\"" + resultMapName + "\" type=\"" + entityBeanName + "\">\r\n";
         StringBuilder sb1 = new StringBuilder();
@@ -209,8 +210,13 @@ public class MybatisServiceImpl implements MybatisService {
             String col = entry.getValue().getColumnName();
             String javaName = entry.getValue().getJavaName();
             String jdbcType = entry.getValue().getJdbcType();
-            String s5 = "\t\t<id property=\"" + javaName + "\" column=\"" + col + "\" jdbcType=\"" + jdbcType + "\"/>\r\n";
-            sb1.append(s5);
+            if(entry.getValue().isPkColumn()){
+                String s5 = "\t\t<id property=\"" + javaName + "\" column=\"" + col + "\" jdbcType=\"" + jdbcType + "\"/>\r\n";
+                sb1.append(s5);
+            }else{
+                String s5 = "\t\t<result property=\"" + javaName + "\" column=\"" + col + "\" jdbcType=\"" + jdbcType + "\"/>\r\n";
+                sb1.append(s5);
+            }
         }
         String s6 = "\t</resultMap>\r\n\r\n";
         String z1 = "\t<!-- 所有字段  -->\r\n";
@@ -243,13 +249,13 @@ public class MybatisServiceImpl implements MybatisService {
         String z2 = "\t<!-- 单条新增数据  -->\r\n";
         StringBuilder s9 = new StringBuilder("\t<insert id=\"insert\" parameterType=\"" + entityBeanName + "\">\r\n");
         s9.append("\t\tinsert into ").append(table).append("\r\n");
-        s9.append("\t\t<include refid=\"sqlColumns\"/>\r\n");
+        s9.append("\t\t(<include refid=\"sqlColumns\"/>)\r\n");
         s9.append("\t\tvalues(\r\n");
         int ii = 0;
         for (Map.Entry<String, JColumn> entry : columnMap.entrySet()) {
             JColumn col = entry.getValue();
             s9.append("\t\t");
-            s9.append("#{").append(col.getColumnName()).append(",jdbcType=").append(col.getJdbcType()).append("}");
+            s9.append("#{").append(CamelCaseUtils.toCamelCase(col.getColumnName())).append(",jdbcType=").append(col.getJdbcType()).append("}");
             if ((ii + 1) != tableStructList.size()) {
                 s9.append(",\r\n");
             } else s9.append("\r\n");
