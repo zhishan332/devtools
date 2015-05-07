@@ -27,7 +27,7 @@ import java.util.Set;
  * @author wangqing
  * @since 14-4-16 下午2:18
  */
-@Service("mybatisService")
+@Service
 public class MybatisServiceImpl implements MybatisService {
     private final Logger log = LoggerFactory.getLogger(MybatisServiceImpl.class);
     @Resource
@@ -68,20 +68,36 @@ public class MybatisServiceImpl implements MybatisService {
     }
 
     @Override
-    public void createConfig(DbSrcEntity dataBase, String table, String path, String packagePath) throws Exception {
-        DataBase db=new DataBase();
+    public void createConfig(DbSrcEntity dataBase, String table, String path) throws Exception {
+        DataBase db = new DataBase();
         db.setDataBaseType(ConvertUtils.getDbTypeByCode(dataBase.getDbType()));
         db.setJdbcUrl(dataBase.getJdbcUrl());
         db.setUserName(dataBase.getUserName());
         db.setPassword(dataBase.getPassword());
         JTable jTable = dataBaseService.getTable(db, table);
         String entityName = CamelCaseUtils.toCamelCase(table);
-        createXmlFile(table, entityName, path, packagePath, jTable);
-        createJavaFile(table, entityName, path, packagePath, jTable);
+        createXmlFile(table, entityName, path, jTable);
+        createJavaFile(table, entityName, path, jTable);
     }
 
-    private void createJavaFile(String table, String entityName, String path,
-                                String packagePath, JTable jTable) {
+    /**
+     * 生成XML文件
+     *
+     * @param dataBase    数据源
+     * @param path        生成路径 默认C：\\
+     * @throws Exception
+     */
+    @Override
+    public void createConfig(DbSrcEntity dataBase, String path) throws Exception {
+        List<String> tables = this.findAllTables(dataBase.getId());
+        if(tables!=null){
+            for(String tb:tables){
+                this.createConfig(dataBase,tb,path);
+            }
+        }
+    }
+
+    private void createJavaFile(String table, String entityName, String path, JTable jTable) {
         Map<String, JColumn> columnMap = jTable.getjColumnMap();
         String entityBeanName = entityName + "Entity";
         entityBeanName = entityBeanName.replaceFirst(entityBeanName.substring(0, 1), entityName.substring(0, 1).toUpperCase());
@@ -93,7 +109,6 @@ public class MybatisServiceImpl implements MybatisService {
         File file2 = new File(path3);
         file2.deleteOnExit();
         StringBuilder sb1 = new StringBuilder();
-        sb1.append("package ").append(packagePath).append(";\r\n\r\n");
         List<String> importList = new ArrayList<String>();
         importList.add("import java.io.Serializable;");
         String dateImp = "import java.util.Date;";
@@ -115,11 +130,12 @@ public class MybatisServiceImpl implements MybatisService {
             String javaType = entry.getValue().getJavaType();
             String colJavaName = entry.getValue().getJavaName();
             String col = entry.getValue().getColumnName();
+            String remark = entry.getValue().getRemark();
             entySb.append("\tprivate ").append(javaType).append(" ").append(colJavaName).append(";");
-            entySb.append("//").append(col).append("\r\n");
+            entySb.append("//").append(remark).append("(字段：").append(col).append(")").append("\r\n");
             if (!entry.getValue().isPkColumn()) {
                 dtoSb.append("\tprivate ").append(javaType).append(" ").append(colJavaName).append(";");
-                dtoSb.append("//").append(col).append("\r\n");
+                dtoSb.append("//").append(remark).append("(字段：").append(col).append(")").append("\r\n");
             }
             if (javaType.equals("Date") && !importList.contains(dateImp)) {
                 importList.add(dateImp);
@@ -168,8 +184,8 @@ public class MybatisServiceImpl implements MybatisService {
         OutputStreamWriter fileWriter;
         OutputStreamWriter fileWriterDto;
         try {
-            fileWriter = new OutputStreamWriter(new FileOutputStream(file),"UTF-8");
-            fileWriterDto = new OutputStreamWriter(new FileOutputStream(file2),"UTF-8");
+            fileWriter = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+            fileWriterDto = new OutputStreamWriter(new FileOutputStream(file2), "UTF-8");
             fileWriter.write(sb1.toString());
             fileWriter.write(entySb.toString());
             fileWriter.write(entySb3.toString());
@@ -186,8 +202,7 @@ public class MybatisServiceImpl implements MybatisService {
         }
     }
 
-    private void createXmlFile(String table, String entityName, String path,
-                               String packagePath, JTable jTable)
+    private void createXmlFile(String table, String entityName, String path, JTable jTable)
             throws RuntimeException {
         Set<String> tableStructList = jTable.getjColumnMap().keySet();
         Map<String, JColumn> columnMap = jTable.getjColumnMap();
@@ -200,9 +215,9 @@ public class MybatisServiceImpl implements MybatisService {
         String s1 = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n";
         String s2 = "<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\" >\r\n";
         String z22 = "<!-- Created with MTool.  -->\r\n";
-        String s3 = "<mapper namespace=\"" + (packagePath.replace("entity","")) +"dao."+(mapName)+"Mapper"+ "\">\r\n\r\n";
+        String s3 = "<mapper namespace=\""  + (mapName) + "Mapper" + "\">\r\n\r\n";
         String entityBeanName = entityName + "Entity";
-        entityBeanName=entityBeanName.replaceFirst(entityBeanName.substring(0, 1), entityBeanName.substring(0, 1).toUpperCase())  ;
+        entityBeanName = entityBeanName.replaceFirst(entityBeanName.substring(0, 1), entityBeanName.substring(0, 1).toUpperCase());
         String resultMapName = entityName + "Map";
         String s4 = "\t<resultMap id=\"" + resultMapName + "\" type=\"" + entityBeanName + "\">\r\n";
         StringBuilder sb1 = new StringBuilder();
@@ -210,10 +225,10 @@ public class MybatisServiceImpl implements MybatisService {
             String col = entry.getValue().getColumnName();
             String javaName = entry.getValue().getJavaName();
             String jdbcType = entry.getValue().getJdbcType();
-            if(entry.getValue().isPkColumn()){
+            if (entry.getValue().isPkColumn()) {
                 String s5 = "\t\t<id property=\"" + javaName + "\" column=\"" + col + "\" jdbcType=\"" + jdbcType + "\"/>\r\n";
                 sb1.append(s5);
-            }else{
+            } else {
                 String s5 = "\t\t<result property=\"" + javaName + "\" column=\"" + col + "\" jdbcType=\"" + jdbcType + "\"/>\r\n";
                 sb1.append(s5);
             }
@@ -229,10 +244,10 @@ public class MybatisServiceImpl implements MybatisService {
             if (i == 0) {
                 sb2.append("\t\t");
                 sb2.append(col);
-            } else if("".equals(lenFlag)){
+            } else if ("".equals(lenFlag)) {
                 sb2.append("\t\t");
                 sb2.append(col);
-            }else {
+            } else {
                 sb2.append(col);
             }
             lenFlag += col;
@@ -333,7 +348,11 @@ public class MybatisServiceImpl implements MybatisService {
             String javaName = entry.getValue().getJavaName();
             String jdbcType = entry.getValue().getJdbcType();
             if (entry.getValue().isPkColumn()) continue;
-            s13.append("\t\t\t<if test=\"").append(javaName).append(" != null\" >\r\n");
+            if(jdbcType.equalsIgnoreCase("VARCHAR")){
+                s13.append("\t\t\t<if test=\"").append(javaName).append(" !=null and ").append(javaName).append(" != ''\" >\r\n");
+            }else{
+                s13.append("\t\t\t<if test=\"").append(javaName).append(" != null\" >\r\n");
+            }
             s13.append("\t\t\t\t").append(col).append(" = ").append("#{").
                     append(javaName).
                     append(",jdbcType=").append(jdbcType).append("}");
@@ -342,8 +361,12 @@ public class MybatisServiceImpl implements MybatisService {
             }
             s13.append("\r\n");
             s13.append("\t\t\t</if>\r\n");
-            s15.append("\t\t\t<if test=\"").append(javaName).append(" != null\" >\r\n");
-            s15.append("\t\t\t\t").append(col).append(" = ").append("#{").append(javaName).
+            if(jdbcType.equalsIgnoreCase("VARCHAR")){
+                s15.append("\t\t\t<if test=\"").append(javaName).append(" !=null and ").append(javaName).append(" != ''\" >\r\n");
+            }else{
+                s15.append("\t\t\t<if test=\"").append(javaName).append(" != null\" >\r\n");
+            }
+            s15.append("\t\t\t\t").append("and ").append(col).append(" = ").append("#{").append(javaName).
                     append(",jdbcType=").append(jdbcType).append("}");
             if (count != columnMap.size()) {
                 s15.append(",");
@@ -362,7 +385,7 @@ public class MybatisServiceImpl implements MybatisService {
         OutputStreamWriter fileWriter;
         try {
 //            fileWriter = new FileWriter(file);
-            fileWriter = new OutputStreamWriter(new FileOutputStream(file),"UTF-8");
+            fileWriter = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
             fileWriter.write(s1);
             fileWriter.write(s2);
             fileWriter.write(z22);

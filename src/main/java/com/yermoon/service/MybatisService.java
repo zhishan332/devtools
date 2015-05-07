@@ -1,7 +1,6 @@
 package com.yermoon.service;
 
 import com.yermoon.entity.DbSrcEntity;
-import com.yermoon.vo.DataBase;
 
 import java.util.List;
 
@@ -60,8 +59,16 @@ public interface MybatisService {
      * @param dataBase    数据源
      * @param table       表名
      * @param path        生成路径 默认C：\\
-     * @param packagePath 包路径 默认com.mtool.entity
      * @throws Exception
      */
-    public void createConfig(DbSrcEntity dataBase, String table, String path, String packagePath) throws Exception;
+    public void createConfig(DbSrcEntity dataBase, String table, String path) throws Exception;
+
+    /**
+     * 生成XML文件
+     *
+     * @param dataBase    数据源
+     * @param path        生成路径 默认C：\\
+     * @throws Exception
+     */
+    public void createConfig(DbSrcEntity dataBase, String path) throws Exception;
 }

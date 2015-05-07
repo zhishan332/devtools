@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * @author wangqing
  * @since 14-4-16 下午1:42
  */
-@Service("mavenService")
+@Service
 public class MavenServiceImpl implements MavenService {
 
     @Override
@@ -27,6 +27,7 @@ public class MavenServiceImpl implements MavenService {
                 "-Dfile=" + path + "\n" +
                 "-Dpackaging=jar\n" +
                 "-DgeneratePom=true";
+        System.out.println("cmd："+cmd);
         return SystemUtils.exeInWin32(cmd);
     }
 }

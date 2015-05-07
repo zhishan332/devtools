@@ -46,22 +46,39 @@ public class MybatisController {
 
     @RequestMapping(value = "/ctconfig", method = RequestMethod.POST)
     @ResponseBody
-    public Response createConfig(int dbid, String tablename, String path, String packagePath) {
+    public Response createConfig(int dbid, String tablename, String path) {
         Response resp = new Response();
         if (dbid < 1 || StringUtils.isBlank(tablename)) {
             resp.setStatus(0);
             resp.setMsg("参数不合法");
             return resp;
         }
-        if (StringUtils.isBlank(packagePath)) {
-            packagePath = "com.yermoon.entity";
-        }
         if (StringUtils.isBlank(path)) {
             path = "C:\\";
         }
         try {
             DbSrcEntity db = mybatisService.getDbSrcEntity(dbid);
-            mybatisService.createConfig(db, tablename, path, packagePath);
+            mybatisService.createConfig(db, tablename, path);
+            resp.setStatus(1);
+        } catch (Exception e) {
+            log.error("创建文件异常", e);
+            resp.setStatus(0);
+            resp.setMsg("创建文件异常");
+        }
+        return resp;
+    }
+
+
+    @RequestMapping(value = "/ctallconfig", method = RequestMethod.POST)
+    @ResponseBody
+    public Response ctAllConfig(int dbid,String path) {
+        Response resp = new Response();
+        if (StringUtils.isBlank(path)) {
+            path = "C:\\";
+        }
+        try {
+            DbSrcEntity db = mybatisService.getDbSrcEntity(dbid);
+            mybatisService.createConfig(db, path);
             resp.setStatus(1);
         } catch (Exception e) {
             log.error("创建文件异常", e);

@@ -5,6 +5,8 @@
 
 #tbSel{
     font-family: Helvetica, "Helvetica Neue", Arial, "微软雅黑", Tahoma, "宋体", sans-serif;
-    font-size: 14px;
+    font-size: 15px;
     padding: 5px;
+    font-weight: bold;
+    color: #6853ff;
 }

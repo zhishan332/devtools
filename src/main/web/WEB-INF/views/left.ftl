@@ -9,11 +9,11 @@
             <li class="nav-header frame-menu">Maven工具</li>
             <li><a href="<@spring.url relativeUrl='/maven/impjar'/>">本地Jar包导入</a></li>
             <li class="nav-header frame-menu">Mybatis工具</li>
-            <li><a href="<@spring.url relativeUrl='/mybatis/create'/>">生成助手</a></li>
-            <li class="nav-header frame-menu">数据库工具</li>
-            <li><a href="<@spring.url relativeUrl='/mybatis/create'/>">快捷语句</a></li>
-            <li class="nav-header frame-menu">Linux工具</li>
-            <li><a href="<@spring.url relativeUrl='/mybatis/create'/>">开发人员常用命令检索</a></li>
+            <li><a href="<@spring.url relativeUrl='/mybatis/create'/>">MyBatis生成助手</a></li>
+            <#--<li class="nav-header frame-menu">数据库工具</li>-->
+            <#--<li><a href="<@spring.url relativeUrl='/mybatis/create'/>">快捷语句</a></li>-->
+            <#--<li class="nav-header frame-menu">Linux工具</li>-->
+            <#--<li><a href="<@spring.url relativeUrl='/mybatis/create'/>">开发人员常用命令检索</a></li>-->
         </ul>
     </div>
     <!--/.well -->

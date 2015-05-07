@@ -52,14 +52,11 @@
         <ul class="nav navbar-nav " id="menu">
             </li>
             <li class="active" role="navigation"><a
-                    href="">京东</a></li>
+                    href="http://www.jd.com" target="_blank">京东</a></li>
             <li class="" role="navigation"><a
-                    href="">谷歌</a></li>
-            <li class="" role="navigation"><a href="">Fuck my life</a></li>
+                    href="http://so.chongbuluo.com/"  target="_blank">谷歌</a></li>
             <li class="" role="navigation">
-                <a href="">火狐</a></li>
-            <li class="" role="navigation">
-                <a href="">StackOverFlow</a></li>
+                <a href="http://stackoverflow.com/"  target="_blank">StackOverFlow</a></li>
         </ul>
         <form class="navbar-form navbar-left" role="search" method="get"
               action="">
