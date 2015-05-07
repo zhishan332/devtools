@@ -1,6 +1,6 @@
 package com.yermoon.service.impl;
 
-import com.yermoon.dao.MybatisDao;
+import com.yermoon.dao.MybatisCreaterDao;
 import com.yermoon.entity.DbSrcEntity;
 import com.yermoon.service.DataBaseService;
 import com.yermoon.service.MybatisService;
@@ -15,7 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,28 +34,28 @@ import java.util.Set;
 public class MybatisServiceImpl implements MybatisService {
     private final Logger log = LoggerFactory.getLogger(MybatisServiceImpl.class);
     @Resource
-    private MybatisDao mybatisDao;
+    private MybatisCreaterDao mybatisCreaterDao;
     @Resource
     private DataBaseService dataBaseService;
 
     @Override
     public void createDbSrc(DbSrcEntity dbSrcEntity) throws Exception {
-        mybatisDao.insertDbsrc(dbSrcEntity);
+        mybatisCreaterDao.insertDbsrc(dbSrcEntity);
     }
 
     @Override
     public List<DbSrcEntity> findAllDbSrc() throws Exception {
-        return mybatisDao.findAll();
+        return mybatisCreaterDao.findAll();
     }
 
     @Override
     public void deleteDbSrc(int id) throws Exception {
-        mybatisDao.deleteById(id);
+        mybatisCreaterDao.deleteById(id);
     }
 
     @Override
     public List<String> findAllTables(int dbsrcId) throws Exception {
-        DbSrcEntity dbsrc = mybatisDao.findById(dbsrcId);
+        DbSrcEntity dbsrc = mybatisCreaterDao.findById(dbsrcId);
         if (dbsrc == null) throw new RuntimeException("未查询到数据源");
         DataBase db = new DataBase();
         db.setDataBaseType(ConvertUtils.getDbTypeByCode(dbsrc.getDbType()));
@@ -64,7 +67,7 @@ public class MybatisServiceImpl implements MybatisService {
 
     @Override
     public DbSrcEntity getDbSrcEntity(int dbsrcId) throws Exception {
-        return mybatisDao.findById(dbsrcId);
+        return mybatisCreaterDao.findById(dbsrcId);
     }
 
     @Override
