@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * To change this template use File | Settings | File Templates.
+ * Mybatis业务DAO
  *
  * @author wangqing
  * @since 15-5-7 下午5:48
