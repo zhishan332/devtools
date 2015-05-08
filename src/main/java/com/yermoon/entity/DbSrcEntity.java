@@ -11,17 +11,17 @@ import java.io.Serializable;
  */
 public class DbSrcEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    private Integer id;
+    private String id;
     private Integer dbType;
     private String jdbcUrl;
     private String userName;
     private String password;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

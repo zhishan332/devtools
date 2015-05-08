@@ -40,7 +40,6 @@ AjaxUtil.ajax = function(type,url,param,successFunction){
     if(param == null){
         param = {};
     }
-    param.t_i_m_e = new Date().getTime();//防止请求使用缓存数据
     jQuery.ajax({
         type: type,
         url: AjaxUtil.contextPath + url,

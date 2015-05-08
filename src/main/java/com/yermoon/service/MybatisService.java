@@ -33,7 +33,7 @@ public interface MybatisService {
      * @param id 主键
      * @throws Exception 数据库连接异常时
      */
-    public void deleteDbSrc(int id) throws Exception;
+    public void deleteDbSrc(String id) throws Exception;
 
     /**
      * 根据数据源查询表名列表
@@ -42,7 +42,7 @@ public interface MybatisService {
      * @return
      * @throws Exception
      */
-    public List<String> findAllTables(int dbsrcId) throws Exception;
+    public List<String> findAllTables(String dbsrcId) throws Exception;
 
     /**
      * 查询单个数据源
@@ -51,7 +51,7 @@ public interface MybatisService {
      * @return
      * @throws Exception
      */
-    public DbSrcEntity getDbSrcEntity(int dbsrcId) throws Exception;
+    public DbSrcEntity getDbSrcEntity(String dbsrcId) throws Exception;
 
     /**
      * 生成XML文件

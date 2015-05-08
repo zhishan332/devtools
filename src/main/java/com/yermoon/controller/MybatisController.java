@@ -46,9 +46,9 @@ public class MybatisController {
 
     @RequestMapping(value = "/ctconfig", method = RequestMethod.POST)
     @ResponseBody
-    public Response createConfig(int dbid, String tablename, String path) {
+    public Response createConfig(String dbid, String tablename, String path) {
         Response resp = new Response();
-        if (dbid < 1 || StringUtils.isBlank(tablename)) {
+        if (StringUtils.isBlank(tablename)) {
             resp.setStatus(0);
             resp.setMsg("参数不合法");
             return resp;
@@ -71,7 +71,7 @@ public class MybatisController {
 
     @RequestMapping(value = "/ctallconfig", method = RequestMethod.POST)
     @ResponseBody
-    public Response ctAllConfig(int dbid,String path) {
+    public Response ctAllConfig(String dbid,String path) {
         Response resp = new Response();
         if (StringUtils.isBlank(path)) {
             path = "C:\\";
@@ -114,7 +114,7 @@ public class MybatisController {
         return resp;
     }
 
-    @RequestMapping(value = "/finddb", method = RequestMethod.POST)
+    @RequestMapping(value = "/finddb", method = RequestMethod.GET)
     @ResponseBody
     public Response findDbSrc() {
         Response resp = new Response();
@@ -132,7 +132,7 @@ public class MybatisController {
 
     @RequestMapping(value = "/findtables", method = RequestMethod.GET)
     @ResponseBody
-    public Response findTables(int dbsrcId) {
+    public Response findTables(String dbsrcId) {
         Response resp = new Response();
         try {
             List<String> list = mybatisService.findAllTables(dbsrcId);
@@ -147,7 +147,7 @@ public class MybatisController {
     }
     @RequestMapping(value = "/deldb", method = RequestMethod.POST)
     @ResponseBody
-    public Response delDatabase(int dbid) {
+    public Response delDatabase(String dbid) {
         Response resp = new Response();
         try {
             mybatisService.deleteDbSrc(dbid);

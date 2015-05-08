@@ -1,8 +1,7 @@
 package com.yermoon.dao;
 
+import com.ohdb.OhBaseDao;
 import com.yermoon.entity.DbSrcEntity;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,14 +13,31 @@ import java.util.List;
  * @since 14-4-17 下午3:36
  */
 @Component("mybatisDao")
-public interface MybatisDao {
-    public int insertDbsrc(DbSrcEntity dbSrcEntity);
+public class MybatisDao {
 
-    public List<DbSrcEntity> findAll();
+    public int insertDbsrc(DbSrcEntity dbSrcEntity) {
+        OhBaseDao<DbSrcEntity> dao = new OhBaseDao<DbSrcEntity>();
+        return dao.insert(dbSrcEntity);
+    }
 
-    @CacheEvict(value = "MybatisDaoCache")
-    public int deleteById(int id);
+    public List<DbSrcEntity> findAll() {
+        OhBaseDao<DbSrcEntity> dao = new OhBaseDao<DbSrcEntity>();
+        return dao.find(new DbSrcEntity());
+    }
 
-    @Cacheable(value = "MybatisDaoCache")
-    public DbSrcEntity findById(int id);
+    public int deleteById(String id) {
+        DbSrcEntity dbSrcEntity = new DbSrcEntity();
+        dbSrcEntity.setId(id);
+        OhBaseDao<DbSrcEntity> dao = new OhBaseDao<DbSrcEntity>();
+        return dao.delete(dbSrcEntity);
+    }
+
+    public DbSrcEntity findById(String id) {
+        DbSrcEntity dbSrcEntity = new DbSrcEntity();
+        dbSrcEntity.setId(id);
+        OhBaseDao<DbSrcEntity> dao = new OhBaseDao<DbSrcEntity>();
+        List<DbSrcEntity> list = dao.find(dbSrcEntity);
+        if (list != null && !list.isEmpty()) return list.get(0);
+        return null;
+    }
 }

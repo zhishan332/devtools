@@ -137,13 +137,14 @@
     function loadData() {
         var sendurl = "/mybatis/finddb";
         var paramObj = {};
-        AjaxUtil.post(sendurl, paramObj, function (resp) {
+        AjaxUtil.get(sendurl, paramObj, function (resp) {
             if (resp == undefined || resp == null) {
                 alert("HTTP请求无数据返回！");
                 return;
             }
             if (resp.status == 1) {
                 var data = resp.data;
+                if(data==null){ return;}
                 var htmlstr = "";
                 var dbSelStr = "";
                 $('#tbData').empty();
@@ -154,10 +155,14 @@
                     if (i == 0) {
                         firstDbId = db.id;
                     }
+                    var dbTypeStr="";
+                    if(db.dbType==1){
+                        dbTypeStr="MYSQL";
+                    }
                     htmlstr += "<tr>";
-                    htmlstr += "<td><a href='javascript:void(0)' onclick='delDbsrc(" + db.id + ")'>删除</a></td>";
+                    htmlstr += "<td><a href='javascript:void(0)' onclick=\"delDbsrc(\'" +db.id+ "\')\">删除</a></td>";
                     htmlstr += "<td>" + (i + 1) + "</td>";
-                    htmlstr += "<td>" + db.dbType + "</td>";
+                    htmlstr += "<td>" + dbTypeStr + "</td>";
                     htmlstr += "<td>" + db.jdbcUrl + "</td>";
                     htmlstr += "<td>" + db.userName + "</td>";
                     htmlstr += "<td>" + db.password + "</td>";
@@ -187,6 +192,7 @@
             }
             if (resp.status == 1) {
                 var data = resp.data;
+                if(data==null) return;
                 var tbSelStr = "";
                 $('#tbSel').empty();
                 $("#tbSel").find("option").remove();

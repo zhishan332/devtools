@@ -1,6 +1,6 @@
 package com.yermoon.service.impl;
 
-import com.yermoon.dao.MybatisCreaterDao;
+import com.yermoon.dao.MybatisDao;
 import com.yermoon.entity.DbSrcEntity;
 import com.yermoon.service.DataBaseService;
 import com.yermoon.service.MybatisService;
@@ -19,10 +19,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Mybatis工具集的业务处理默认实现类
@@ -34,28 +31,29 @@ import java.util.Set;
 public class MybatisServiceImpl implements MybatisService {
     private final Logger log = LoggerFactory.getLogger(MybatisServiceImpl.class);
     @Resource
-    private MybatisCreaterDao mybatisCreaterDao;
+    private MybatisDao mybatisDao;
     @Resource
     private DataBaseService dataBaseService;
 
     @Override
     public void createDbSrc(DbSrcEntity dbSrcEntity) throws Exception {
-        mybatisCreaterDao.insertDbsrc(dbSrcEntity);
+        dbSrcEntity.setId(UUID.randomUUID().toString());
+        mybatisDao.insertDbsrc(dbSrcEntity);
     }
 
     @Override
     public List<DbSrcEntity> findAllDbSrc() throws Exception {
-        return mybatisCreaterDao.findAll();
+        return mybatisDao.findAll();
     }
 
     @Override
-    public void deleteDbSrc(int id) throws Exception {
-        mybatisCreaterDao.deleteById(id);
+    public void deleteDbSrc(String id) throws Exception {
+        mybatisDao.deleteById(id);
     }
 
     @Override
-    public List<String> findAllTables(int dbsrcId) throws Exception {
-        DbSrcEntity dbsrc = mybatisCreaterDao.findById(dbsrcId);
+    public List<String> findAllTables(String dbsrcId) throws Exception {
+        DbSrcEntity dbsrc = mybatisDao.findById(dbsrcId);
         if (dbsrc == null) throw new RuntimeException("未查询到数据源");
         DataBase db = new DataBase();
         db.setDataBaseType(ConvertUtils.getDbTypeByCode(dbsrc.getDbType()));
@@ -66,8 +64,8 @@ public class MybatisServiceImpl implements MybatisService {
     }
 
     @Override
-    public DbSrcEntity getDbSrcEntity(int dbsrcId) throws Exception {
-        return mybatisCreaterDao.findById(dbsrcId);
+    public DbSrcEntity getDbSrcEntity(String dbsrcId) throws Exception {
+        return mybatisDao.findById(dbsrcId);
     }
 
     @Override
