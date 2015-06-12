@@ -16,7 +16,7 @@
     <link href="<@spring.url relativeUrl='/statics/css/yermoon.css'/>" type="text/css" rel="stylesheet">
     <#--<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap-theme.min.css">-->
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <script src="http://lib.sinaapp.com/js/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
+    <script src="<@spring.url relativeUrl='/statics/js/plugins/jquery.min.js'/>" type="text/javascript"></script>
     <script src="<@spring.url relativeUrl='/statics/js/plugins/bootstrap.js'/>" type="text/javascript"></script>
     <#--<script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>-->
     <script src="<@spring.url relativeUrl='/statics/js/plugins/mumayi_top.js'/>" type="text/javascript"></script>
