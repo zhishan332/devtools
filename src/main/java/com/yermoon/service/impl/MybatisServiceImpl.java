@@ -280,7 +280,7 @@ public class MybatisServiceImpl implements MybatisService {
         s9.append("\t\t)\r\n");
         s9.append("\t</insert>\r\n\r\n");
         String z3 = "\t<!-- 根据主键删除数据  -->\r\n";
-        StringBuilder s10 = new StringBuilder("\t<delete id=\"deleteByPrimaryKey\" parameterType=\"java.lang.Integer\">\r\n");
+        StringBuilder s10 = new StringBuilder("\t<delete id=\"delByPk\" parameterType=\"java.lang.Integer\">\r\n");
         s10.append("\t\tdelete from ").append(table).append("\r\n");
         s10.append("\t\twhere ").append(jTable.getPkColumnName()).append(" = ");
         s10.append("#{").append(jTable.getPkJavaName()).append(",jdbcType=").append(columnMap.get(jTable.getPkColumnName()).getJdbcType()).append("}\r\n");
@@ -294,9 +294,9 @@ public class MybatisServiceImpl implements MybatisService {
         s11.append("\t\t</foreach>\r\n");
         s11.append("\t</delete>\r\n\r\n");
         String z5 = "\t<!-- 根据主键全量更新  -->\r\n";
-        StringBuilder s12 = new StringBuilder("\t<update id=\"updateByPrimaryKey\" parameterType=\"" + entityBeanName + "\">\r\n");
+        StringBuilder s12 = new StringBuilder("\t<update id=\"updateByPk\" parameterType=\"" + entityBeanName + "\">\r\n");
         s12.append("\t\tupdate ").append(table).append("\r\n");
-        s12.append("\t\tset ");
+        s12.append("\t\tset\n");
         int flag = 0;
         for (Map.Entry<String, JColumn> entry : columnMap.entrySet()) {
             String col = entry.getValue().getColumnName();
@@ -325,11 +325,11 @@ public class MybatisServiceImpl implements MybatisService {
         s12.append("#{").append(CamelCaseUtils.toCamelCase(pkName)).append("}\r\n");
         s12.append("\t</update>\r\n\r\n");
         String z6 = "\t<!-- 根据主键有选择的更新  -->\r\n";
-        StringBuilder s13 = new StringBuilder("\t<update id=\"updateSegmentByPrimaryKey\" parameterType=\"" + entityBeanName + "\">\r\n");
+        StringBuilder s13 = new StringBuilder("\t<update id=\"updateSegmentByPk\" parameterType=\"" + entityBeanName + "\">\r\n");
         s13.append("\t\tupdate ").append(table).append("\r\n");
         s13.append("\t\t<set>\r\n");
         String z7 = "\t<!-- 根据主键查询  -->\r\n";
-        StringBuilder s14 = new StringBuilder("\t<select id=\"selectByPrimaryKey\" parameterType=\"java.lang.Integer\" resultMap=\"" + resultMapName + "\">\r\n");
+        StringBuilder s14 = new StringBuilder("\t<select id=\"getByPk\" parameterType=\"java.lang.Integer\" resultMap=\"" + resultMapName + "\">\r\n");
         s14.append("\t\tselect\r\n");
         s14.append("\t\t<include refid=\"sqlColumns\"/>\r\n");
         s14.append("\t\tfrom ").append(table).append("\r\n");
@@ -337,7 +337,8 @@ public class MybatisServiceImpl implements MybatisService {
         s14.append("#{").append(pkJavaName).append("}\r\n");
         s14.append("\t</select>\r\n\r\n");
         String z8 = "\t<!-- 根据传入的字段值查询  -->\r\n";
-        StringBuilder s15 = new StringBuilder("\t<select id=\"selectByCriteria\" parameterType=\"" + entityBeanName + "\" resultMap=\"" + resultMapName + "\">\r\n");
+//        StringBuilder s15 = new StringBuilder("\t<select id=\"find\" parameterType=\"" + entityBeanName + "\" resultMap=\"" + resultMapName + "\">\r\n");
+        StringBuilder s15 = new StringBuilder("\t<select id=\"find\"  resultMap=\"" + resultMapName + "\">\r\n");
         s15.append("\t\tselect\r\n");
         s15.append("\t\t<include refid=\"sqlColumns\"/>\r\n");
         s15.append("\t\tfrom ").append(table).append("\r\n");
